@@ -1,0 +1,34 @@
+{
+  "chat": [
+    {
+      "timestamp": "1527492000000",
+      "direction": "OUTGOING",
+      "message": "Hello"
+    },
+    {
+      "timestamp": "1527582300000",
+      "direction": "INCOMING",
+      "message": "Hi"
+    },
+    {
+      "timestamp": "1527890400000",
+      "direction": "OUTGOING",
+      "message": "What is Mudah.my"
+    },
+    {
+      "timestamp": "1527976860000",
+      "direction": "INCOMING",
+      "message": "Mudah.my is the most favorite local app in Malaysia for searching, buying and selling pre-loved items. Get best deals at the reasonable prices from over 1,6 million items every day."
+    },
+    {
+      "timestamp": "1528017300000",
+      "direction": "OUTGOING",
+      "message": "I see, thanks!"
+    },
+    {
+      "timestamp": "1528102200000",
+      "direction": "INCOMING",
+      "message": "No problem!"
+    }
+  ]
+}
