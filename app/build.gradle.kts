@@ -72,6 +72,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("io.coil-kt:coil-compose:2.2.2")
 
     // Retrofit + RxJava
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

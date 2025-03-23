@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.room.Insert
 import com.my.mudah.model.ChatDao
 import com.my.mudah.model.ChatMessage
+import com.my.mudah.model.User
 import com.my.mudah.service.ChatApiService
 import com.my.mudah.service.ChatResponse
 import io.reactivex.Completable
@@ -31,4 +32,12 @@ class ChatRepository @Inject constructor(
     }
     fun sendMessageToApi(msg: ChatMessage): Single<Response<ChatResponse>> =
         api.sendMessage(mapOf("message" to msg.message))
+
+    fun getUsers(): Single<List<User>> {
+        return api.getUsers(1)
+            .map { it.body()?.data ?: emptyList() }
+            .subscribeOn(Schedulers.io())
+    }
+
+
 }

@@ -23,6 +23,7 @@ class ChatViewModel @Inject constructor(private val repo: ChatRepository) : View
     private var lastSentTime = System.currentTimeMillis()
 
     init {
+        loadUsers()
         loadMessages()
         observeInactivity()
     }
@@ -71,4 +72,17 @@ class ChatViewModel @Inject constructor(private val repo: ChatRepository) : View
             }
         }
     }
+
+    val userList = mutableStateOf<List<User>>(emptyList())
+
+    fun loadUsers() {
+        repo.getUsers()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ users ->
+                userList.value = users
+            }, {
+                Log.e("ChatViewModel", "Error fetching users", it)
+            })
+    }
+
 }
