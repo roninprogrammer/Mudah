@@ -45,7 +45,7 @@ fun ChatScreen(viewModel: ChatViewModel) {
                     Row(Modifier.padding(8.dp)) {
                         AsyncImage(model = user.avatar, contentDescription = null)
                         Column(Modifier.padding(start = 8.dp)) {
-                            Text("${user.firstName} ${user.lastName}")
+                            Text("${user.first_name} ${user.last_name}")
                             Text(user.email, style = MaterialTheme.typography.bodySmall)
                         }
                     }

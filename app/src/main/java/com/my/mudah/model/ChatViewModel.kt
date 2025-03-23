@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import okhttp3.ResponseBody
+import org.json.JSONObject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(private val repo: ChatRepository) : ViewModel() {
@@ -46,14 +48,29 @@ class ChatViewModel @Inject constructor(private val repo: ChatRepository) : View
         )
         lastSentTime = System.currentTimeMillis()
 
-        repo.sendMessageToApi(msg)
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io()) // ✅ this is the key change
-            .subscribe({
-                repo.insertMessage(msg) // ✅ now runs safely in background
-            }, {
-                Log.e("ChatViewModel", "sendMessage error", it)
-            })
+        repo.sendMessageToApi(msg).subscribe({ response ->
+            val responseBody = response.body()?.toString() ?: return@subscribe
+
+            val json = JSONObject(responseBody)
+            val chatArray = json.optJSONArray("chat")
+            if (chatArray != null) {
+                for (i in 0 until chatArray.length()) {
+                    val item = chatArray.getJSONObject(i)
+                    val message = ChatMessage(
+                        timestamp = item.getLong("timestamp"),
+                        direction = item.getString("direction"),
+                        message = item.getString("message")
+                    )
+                    repo.insertMessage(message)
+                }
+            } else {
+                // fallback: just insert the typed message
+                repo.insertMessage(msg)
+            }
+
+        }, {
+            Log.e("ChatViewModel", "API Error", it)
+        })
     }
 
     private fun observeInactivity() {
@@ -80,6 +97,7 @@ class ChatViewModel @Inject constructor(private val repo: ChatRepository) : View
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ users ->
                 userList.value = users
+                Log.d("ChatViewModel", "Fetched users: ${users.size}")
             }, {
                 Log.e("ChatViewModel", "Error fetching users", it)
             })

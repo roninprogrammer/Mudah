@@ -12,6 +12,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -30,7 +31,7 @@ class ChatRepository @Inject constructor(
                 Log.e("ChatRepository", "Error inserting message", it)
             })
     }
-    fun sendMessageToApi(msg: ChatMessage): Single<Response<ChatResponse>> =
+    fun sendMessageToApi(msg: ChatMessage): Single<Response<ResponseBody>> =
         api.sendMessage(mapOf("message" to msg.message))
 
     fun getUsers(): Single<List<User>> {
